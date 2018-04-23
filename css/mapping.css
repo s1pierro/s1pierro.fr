@@ -8,6 +8,17 @@ header {
 
     background-color: white;
 }
+body
+{
+    background-color: #444;
+	color: #eee;
+}
+
+footer
+{
+    background-color: #444;
+	color: #eee;
+}
 
 @media (min-width: 992px) {
   header {

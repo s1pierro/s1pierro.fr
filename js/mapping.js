@@ -21,8 +21,6 @@ function genrmat(a,b,c){a*=Math.PI/180;var d=Math.PI/180*b,e=Math.PI/180*c;c=gen
 ////////////////////////////////////////////////////////////////////////////////
 
 var buffer = {};
-var envwvft = {};
-var envbuffer = {};
 
 var zoom = 1000;
 var viewangle = 140;
@@ -72,34 +70,12 @@ function genfmat() {
 	fmat = multiplymatrix(tmat, mat);
 }
 window['genfmat'] = genfmat;
-function drawenv(container) {
-	for (var i = 0; i < envwvft.vertices.length; i++)
-		envbuffer.vertices[i] = applymatNpersp(fmat, envwvft.vertices[i]);
-	for (var i = 0; i < envwvft.triangles.length; i++)
-		envbuffer.triangles[i].n = applymat(rmat, envwvft.triangles[i].n);
 
-	for (var j = 0; j < envwvft.triangles.length ; j++)
-	{
-		var n = envbuffer.triangles[ j ].n[2];
-		if (n>-0.5)
-		{
-			var svg = document.createElementNS("http://www.w3.org/2000/svg",'polygon');
-			envbuffer.triangles[ j ].trigon = '';
-			for ( var k = 0 ; k < envwvft.triangles[j].length ; k++)
-				envbuffer.triangles[ j ].trigon += ' '+envbuffer.vertices[envwvft.triangles[j][k]-1][0]+','+envbuffer.vertices[envwvft.triangles[j][k]-1 ][1];
-			svg.setAttribute('points',envbuffer.triangles[j].trigon);
-			svg.setAttribute('class', envwvft.triangles[j].mat);
-			svg.setAttribute('class', envbuffer.triangles[ j ].mat);
-			container.appendChild(svg);
-		}
-	}
-}
-window['drawenv'] = drawenv;
 function drawScene(container) {  //optimised speed ( cut in lightening acuracy )
 
   	container.innerHTML = "";
-	$("#arp").attr('transform', 'translate('+(273.44049+ZlockANGy*2)+',-'+(ZlockANGx-50)+')');
-	drawenv(container);
+	//$("#arp").attr('transform', 'translate('+(273.44049+ZlockANGy*2)+',-'+(ZlockANGx-50)+')');
+	//drawenv(container);
 	var mat = multiplymatrix(rmat, pmat);
 	fmat = multiplymatrix(tmat, mat);
 	genItemszmap(miniView.Items);
@@ -287,17 +263,18 @@ function miniView () {
 window['rotateWavefront'] = rotateWavefront;
 function initScene()
 {
-	var minH = $(window).height()/2.3;
+	var minH = $(window).height()/1.7;
+	var w = $(window).width();
+	var h = $(window).height()/2;
+//	console.log ('window : '+$(window).height()+'footer : '+$('footer').height());
+	if ( h < minH ) h = minH;
+	
 	var minA = 150;
 	var maxA = 195;
 	
 	var minR = 1;
 	var maxR = 5;
 	
-	
-	var w = $(window).width();
-	var h = /*$(window).height()-$('#services').height()-140;
-	if ( h < $(window).height()/3 ) h =*/ $(window).height()/2;
 	var zoom = 30;
 	var ratio = w/h;
 	var initAng = 165;
@@ -332,34 +309,6 @@ function buildScene()
 }
 window['buildScene'] = buildScene;
 
-(function($) {
-  "use strict"; // Start of use strict
-
-	// Smooth scrolling using jQuery easing
-	$('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function() {
-		if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-			var target = $(this.hash);
-			target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-			if (target.length) {
-				$('html, body').animate({
-					scrollTop: (target.offset().top - 54)
-				}, 1000, "easeInOutExpo");
-				return false;
-			}
-		}
-	});
-
-	// Closes responsive menu when a scroll trigger link is clicked
-	$('.js-scroll-trigger').click(function() {
-		$('.navbar-collapse').collapse('hide');
-	});
-	// Activate scrollspy to add active class to navbar items on scroll
-	$('body').scrollspy({
-		target: '#mainNav',
-		offset: 54
-	});
-
-})(jQuery); // End of use strict
 function miniView () {
 		
 
@@ -374,15 +323,13 @@ function miniView () {
 		
 	----------------------------------------------------------------------*/
 
-	envwvft = $.extend(true, {}, loadWavefrontFromHTLM('#site-sol', 'site-sol'));
-	envbuffer = $.extend(true, {},envwvft);
-	buffer = $.extend(true, {}, envwvft);
-
 	var container = document.getElementById("renderbox");
 	if ( typeof miniView.init == 'undefined' ) {
 		miniView.init = true;
 		miniView.Items = [];
 		buildScene ();
+	buffer = $.extend(true, {}, loadWavefrontFromHTLM('#logo', 'buffer'));
+		
 		initScene();	
 		drawScene(container);
 	}
@@ -407,7 +354,6 @@ function miniView () {
 	mc.on("pan", function(ev) {
 		if (miniView.view != 'mobile') {
 			rotateViewZlock(ev.velocityY * 15, ev.velocityX * 15, 0);
-
 			drawScene(container);
 		}
 		else {
@@ -417,37 +363,17 @@ function miniView () {
 	$('.test').on('mousedown', function() {
 		console.log('test down');
 	});
-/*	$('#paperseed-tgl').on('click', function() {
-	$('#paperseed').css( 'display', 'block');
-	});
-*/
+
 		$('body').on('click', '#paperseed-tgl', function() {
 		$('#paperseed').css( 'display', 'block');
 	});	
 	$('#svg8').on('mousewheel', function(event) {
 		console.log(event.deltaX, event.deltaY, event.deltaFactor);
-	
 		translateView (0, 0,event.deltaY*event.deltaFactor );
-});
-	document.getElementById("paperseed-tgl")
-		.addEventListener("click", function() {
-			document.getElementById("paperseed").hidden = false;
-			document.getElementById("protofdm").hidden = true;
-		}, false);
-	document.getElementById("protofdm-tgl")
-		.addEventListener("click", function() {
-			document.getElementById("paperseed").hidden = true;
-			document.getElementById("protofdm").hidden = false;
-		}, false);
-	/*var spin = setInterval(function(){
-		//console.log('spining');
-		var inc = 0.1;
-		if (ZlockANGy < 80 ) inc = -inc;
-		if (ZlockANGy > yAMAX ) inc = -inc;
-		rotateViewZlock(0, inc, 0);
-					drawScene(container);
-		}, 90);*/
-	}
+		drawScene(container);
+	});
+
+}
 		
 window['miniView'] = miniView;
 
