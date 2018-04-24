@@ -8,7 +8,11 @@ header {
   padding: 55px 0 0;
     background-color: white;
 }
+footer
+{
+    background-color: #222;
 
+}
 @media (min-width: 992px) {
   header {
     padding: 55px 0 0px;
@@ -96,6 +100,11 @@ color: black;
 #credits
 {
 	background-color:#777;
+	color:#ddd;
+}
+#comments
+{
+	background-color:#444;
 	color:#ddd;
 }
 
