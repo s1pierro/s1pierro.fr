@@ -19,6 +19,12 @@ function genrmat(a,b,c){a*=Math.PI/180;var d=Math.PI/180*b,e=Math.PI/180*c;c=gen
 ////////////////////////////////////////////////////////////////////////////////
 //	miniView core functions
 ////////////////////////////////////////////////////////////////////////////////
+function Log(s)
+{
+	console.log (s);
+}
+window['Log'] = Log;
+
 
 var buffer = {};
 
@@ -71,7 +77,10 @@ function genfmat() {
 }
 window['genfmat'] = genfmat;
 
-function drawScene(container) {  //optimised speed ( cut in lightening acuracy )
+/* render quick selection */
+function drawScene (container) { drawSceneSolid(container) } window['drawScene'] = drawScene;
+
+function drawSceneFlat(container) {  //optimised speed ( cut in lightening acuracy )
 
   	container.innerHTML = "";
 	//$("#arp").attr('transform', 'translate('+(273.44049+ZlockANGy*2)+',-'+(ZlockANGx-50)+')');
@@ -101,7 +110,43 @@ function drawScene(container) {  //optimised speed ( cut in lightening acuracy )
 		}
 	}
 }
-window['drawScene'] = drawScene;
+window['drawSceneFlat'] = drawSceneFlat;
+function drawSceneSolid(container) {  //optimised speed ( cut in lightening acuracy )
+
+  	container.innerHTML = "";
+	//$("#arp").attr('transform', 'translate('+(273.44049+ZlockANGy*2)+',-'+(ZlockANGx-50)+')');
+	//drawenv(container);
+	var mat = multiplymatrix(rmat, pmat);
+	fmat = multiplymatrix(tmat, mat);
+	genItemszmap(miniView.Items);
+	for ( var v = 0 ; v < miniView.Items.zmap.length ; v++ )
+	{
+		var tmpWvft = miniView.Items[miniView.Items.zmap[v][0]].w;
+		buffer = $.extend(true, {}, tmpWvft);
+		for (var i = 0; i < tmpWvft.vertices.length; i++)
+			buffer.vertices[i] = applymatNpersp(fmat, tmpWvft.vertices[i]);
+		for (var i = 0; i < tmpWvft.triangles.length; i++)
+			buffer.triangles[i].n = applymat(rmat, tmpWvft.triangles[i].n);
+		genzmap(buffer);
+		for (var i = 0; i < buffer.zmap.length ; i++)
+		{
+			var j = buffer.zmap[i][0];
+			var svg = document.createElementNS("http://www.w3.org/2000/svg",'polygon');
+			var n = buffer.triangles[ j ].n[2];
+
+
+			buffer.triangles[ j ].trigon = buffer.vertices[tmpWvft.triangles[j][0]-1][0]+','+buffer.vertices[tmpWvft.triangles[j][0]-1 ][1];
+			
+			for ( var k = 1 ; k < tmpWvft.triangles[j].length ; k++)
+				buffer.triangles[ j ].trigon += ' '+buffer.vertices[tmpWvft.triangles[j][k]-1][0]+','+buffer.vertices[tmpWvft.triangles[j][k]-1 ][1];
+
+			svg.setAttribute('points',buffer.triangles[j].trigon);
+			svg.setAttribute('class', 'solid solid-step-'+Math.floor(n*16) );
+			container.appendChild(svg);
+		}
+	}
+}
+window['drawSceneSolid'] = drawSceneSolid;
 
 function parsewavefront(objText, id) {
 
@@ -182,7 +227,7 @@ function genzmap(obj) {
 			somme += obj.vertices[obj.triangles[i][l] - 1][2];
 		somme = somme/obj.triangles[i].length;
 		var n = obj.triangles[ i ].n[2];
-		if ( somme > 200 && n > -0.3 )
+		if ( somme > 20 && n > -0.3 )
 		{
 			var tmp2 = new Array(i, somme);
 			tmp.push(tmp2);
