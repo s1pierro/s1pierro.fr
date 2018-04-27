@@ -588,5 +588,3 @@ window['miniView'] = miniView;
 $(window).on("load", miniView ());
 
 
-
-

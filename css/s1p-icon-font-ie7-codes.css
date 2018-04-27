@@ -1,0 +1,5 @@
+
+.icon-s1p { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe809;&nbsp;'); }
+.icon-mail-squared { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf199;&nbsp;'); }
+.icon-git-squared { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf1d2;&nbsp;'); }
+.icon-facebook-squared { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf308;&nbsp;'); }

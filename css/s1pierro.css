@@ -3,6 +3,13 @@
  * Copyright 2013-2017 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-scrolling-nav/blob/master/LICENSE)
  */
+pre
+{
+	background-color: #444;
+	color: #ccc !important;
+	padding: 0.5em;
+}
+
 
 header {
   padding: 55px 0 0;
