@@ -30,19 +30,66 @@
     
 	<section id="showdown_section">
 		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<h1>Showdown front end</h1>
+				</div>	
+				<div class="col-lg-6">
+					<h5>options</h5><hr/>
+					<div class="row">
+				
+						<div class="col-lg-6">
 
-			<h1>Showdown tool</h1>
-			<div class="form-group">
-				<label for="md_input">Texte a convertir :</label>
-				<textarea class="form-control" id="md_input" rows="15"></textarea>
+							<div class="form-group">
+								<label for="hlevelstart">headers start level</label>
+								<select class="form-control" id="hlevelstart">
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>5</option>
+								</select>
+							</div>
+						</div>	
+						<div class="col-lg-6">
+											<div class="form-check">
+								<label class="form-check-label">
+								<input id="titleid" class="form-check-input" type="checkbox" value="">
+								generate headers Ids
+								</label>
+							</div>
+						</div>	
+
+						<div class="col-lg-6">
+							<div class="form-check">
+								<label class="form-check-label">
+								<input id="autolink" class="form-check-input" type="checkbox" value="">
+								simplified auto link
+								</label>
+							</div>
+						</div>	
+						
+						
+				</div>	
+					
+					
+				</div>	
+				<div class="col-lg-12">
+
+					<div class="form-group">
+						<!--label for="md_input">Texte a convertir :</label-->
+						<br>
+						<textarea class="form-control" id="md_input" rows="15"></textarea>
+					</div>
+					<button id="convert" type="submit" class="btn btn-primary">Convertir</button>
+				</div>	
 			</div>
-			<button id="convert" type="submit" class="btn btn-primary">Convertir</button>
 		</div>
 	</section>
 
-	<section id="showdown_output" class="bg-medium">
+	<section id="showdown_output" class="bg-medium" hidden>
 	<div class="container">
-	<h2>Code HTML</h2>
+	<h2 class="text-center">Code HTML</h2>
 		<div class="row">
 		<div class="col-lg-12">
 	
@@ -56,9 +103,9 @@
 
 	</div>
 	</section>
-	<section id="showdown_preview">
+	<section id="showdown_preview" hidden>
 	<div class="container">
-	<h2>Prévisualisation</h2><hr/>
+	<h2 class="text-center">Prévisualisation</h2><hr/>
 	<div id="html_preview">
 
 	</div>
@@ -78,6 +125,8 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
 	<script src="js/showdown.min.js"></script>
+	<script src="js/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
 	<script src="js/admintools.js"></script>
 	
 
