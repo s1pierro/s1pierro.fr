@@ -40,11 +40,14 @@ body
 	padding-right: 1.5em;
 	background-color: #111;
 	color: #eee;
+	z-index:3;
 }
 
 #svg7
 {
-float: left;
+	position : fixed;
+	z-index:2;
+
 	top: 0px;
 	left: 0px;
 
@@ -54,7 +57,13 @@ float: left;
 
 #svg8
 {
-float: right;
+	position : fixed;
+	z-index:1;
+	top: 0px;
+	right: 0px;
+
+background: -webkit-radial-gradient(center, ellipse cover,  #777 0%,#111 100%); /* Chrome10-25,Safari5.1-6 */
+background: radial-gradient(ellipse at center,  #777 0%,#111 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 .solid {
 

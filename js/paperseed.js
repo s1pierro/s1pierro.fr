@@ -41,7 +41,7 @@ var yAMAX = 160;
 var yAMIN = 70;
 
 
-function initViewZlock(x, y, z, zm)
+function initView(x, y, z, zm)
 {
 	zoom = zm;
 	pmat = gentmat(0, 0, 0);
@@ -52,7 +52,7 @@ function initViewZlock(x, y, z, zm)
 	rmat = genrmat( x, y, z);
 	genfmat();
 }
-window['initViewZlock'] = initViewZlock;
+window['initView'] = initView;
 function rotateView(x, y, z)
 {
 	var tmp = genrmat( x, y, z);
@@ -148,7 +148,7 @@ function drawSceneSolid(container) {  //optimised speed ( cut in lightening acur
 				buffer.triangles[ j ].trigon += ' '+buffer.vertices[tmpWvft.triangles[j][k]-1][0]+','+buffer.vertices[tmpWvft.triangles[j][k]-1 ][1];
 
 			svg.setAttribute('points',buffer.triangles[j].trigon);
-			svg.setAttribute('class', 'tri-'+j+' solid solid-step-'+Math.floor(n*16) );
+			svg.setAttribute('class', 'ID'+j+'ID shape solid solid-step-'+Math.floor(n*16) );
 			container.appendChild(svg);
 		}
 	}
@@ -322,11 +322,13 @@ function initScene()
 	var zoom = 10;
 	var ratio = w/h;
 
-	initViewZlock(182, yAMAX, 0, 70);
+	initView(182, yAMAX, 0, 70);
 	$('#svg7').attr('width', h*210/297);
 	$('#svg7').attr('height', h);
-	$('#svg8').attr('width', w-h*210/297-55);
+
+	$('#svg8').attr('width', w-h*210/297);
 	$('#svg8').attr('height', h);
+
 	$("#svg8").attr('viewBox', '-'+((zoom*ratio)/2)+' -'+(zoom/2)+' '+(zoom*ratio)+' '+zoom);
 }
 window['initScene'] = initScene;
@@ -349,7 +351,13 @@ function buildScene()
 	miniView.Items.push(altItem);
 }
 window['buildScene'] = buildScene;
-
+function getFaceId(f) {
+	var tmp = $(f).attr('class');
+	var tmp2 = tmp.match(/ID.+ID/) + '';
+	if (tmp2.includes('ID')) tmp2=tmp2.slice(2, tmp2.length-2);
+	return tmp2;
+}
+window['getFaceId'] = getFaceId;
 function miniView () {
 		
 
@@ -405,14 +413,23 @@ function miniView () {
 		console.log('test down');
 	});
 
-		$('body').on('click', '#paperseed-tgl', function() {
-		$('#paperseed').css( 'display', 'block');
+	$('body').on('click', '#menu-toggle', function() {
+
 	});	
+
 	$('#svg8').on('mousewheel', function(event) {
 		console.log(event.deltaX, event.deltaY, event.deltaFactor);
 		translateView (0, 0,event.deltaY*event.deltaFactor );
 		drawScene(container);
 	});
+
+	$('body').on('click', '.shape', function() {
+	var id = getFaceId (this)
+	console.log("shape "+id+" tapped");
+
+	});	
+
+
 
 }
 		
