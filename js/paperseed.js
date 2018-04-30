@@ -5,7 +5,7 @@
 	spierro@free.fr
 	LICENSE : libre
 */
-'use strict';
+//'use strict';
 
 ////////////////////////////////////////////////////////////////////////////////
 //	miniView core functions
@@ -18,6 +18,7 @@ var buffer = {};
 
 var zoom = 100;
 var viewangle = 140;
+var scaleconst = 50;
 var ZlockANGx = 190;
 var ZlockANGy = 230;
 var ZlockANGz = 0;
@@ -64,6 +65,7 @@ function translateView(x, y, z)
 {
 	var tmp = gentmat( x, y, z);
 	tmat = multiplymatrix (tmp, tmat);
+	logMatrix(tmat);
 }
 window['translateView'] = translateView;
 function genfmat() {
@@ -161,6 +163,7 @@ function parsewavefront(objText, id) {
 			nv++;
 			var vertices = vertex.split(" ");
 			vertices.shift();
+			
 			return vertices;
 		});
 	}
@@ -307,7 +310,7 @@ function initScene()
 	var zoom = 10;
 	var ratio = w/h;
 
-	initView(182, yAMAX, 0, 70);
+	initView(182, yAMAX, 0, 30);
 	$('#svg7').attr('width', h*210/297);
 	$('#svg7').attr('height', h);
 
@@ -322,7 +325,7 @@ function buildScene()
 	var Logo = {};
 	var TMPwvft = {};
 	Logo = $.extend(true, {}, loadWavefrontFromHTLM('#logo', 'logo'));
-	miniView.Items.splice (0,miniView.Items.length );
+	miniView.Items.splice (0, miniView.Items.length );
 	var tmpWvft2 = {};
 	
 	var vpos = [0, 0, 0];
@@ -343,6 +346,16 @@ function getFaceId(f) {
 	return tmp2;
 }
 window['getFaceId'] = getFaceId;
+
+
+function add_to_renderplane (renderplane, t)
+{
+			var svg = document.createElementNS("http://www.w3.org/2000/svg",'polygon');
+			svg.setAttribute('points', t);
+			svg.setAttribute('class', 'solid' );
+			renderplane.appendChild(svg);
+
+}
 function miniView () {
 	var mode = (eval("var __temp = null"), (typeof __temp === "undefined")) ? 
 	    "strict": 
@@ -353,30 +366,6 @@ function miniView () {
 	    	l('interprete js : '+mode, 'blr');
 
 
-	/*======================================================================*/
-	// TESTING AREA //
-
-	var v1 = new Vector ([0.0, 0.0, 0.0], [0.0, 1.0, 0.0], 2.0);
-	var v2 = new Vector ([0.0, 10.0, 0.0], [1.0, 0.0, 0.0], 2.0);
-	
-	l('vecteur 1', 'xlb');
-	logVector (v1);
-	l('vecteur 2', 'xlb');	
-	logVector (v2);
-	
-	var itpmat = geninterpmat (v1, v2);
-	l('matrice d interpolation :', 'xlb')
-	logMatrix (itpmat);
-
-	
-	
-
-	// TESTING AREA //
-	/*======================================================================*/
-
-
-
-
 	/*======================================================================
 	
 		Initialisations
@@ -384,11 +373,12 @@ function miniView () {
 	----------------------------------------------------------------------*/
 
 	var container = document.getElementById("renderbox");
+	var renderplane = document.getElementById("renderplane");
 	if ( typeof miniView.init == 'undefined' ) {
 		miniView.init = true;
 		miniView.Items = [];
 		buildScene ();
-	buffer = $.extend(true, {}, loadWavefrontFromHTLM('#logo', 'buffer'));
+		buffer = $.extend(true, {}, loadWavefrontFromHTLM('#logo', 'buffer'));
 		
 		initScene();	
 		drawScene(container);
@@ -429,15 +419,90 @@ function miniView () {
 	});	
 
 	$('#svg8').on('mousewheel', function(event) {
-		console.log(event.deltaX, event.deltaY, event.deltaFactor);
+
 		translateView (0, 0,event.deltaY*event.deltaFactor );
 		drawScene(container);
 	});
 
 	$('body').on('click', '.shape', function() {
-	var id = getFaceId (this)
-	console.log("shape "+id+" tapped");
+	
+		// Dirty implementation trying, will be replace by separate explicit functions
+		
+		
+		var id = getFaceId (this)
+		l("shape "+id+" tapped", 'xlb');
+		
+		
+		
+		var n = miniView.Items[0].w.triangles[id].n;
 
+		
+		var target = new Vector ([0.0, 0.0, 0.0], [0.0, 0.0, 1.0], 1.0);
+		var bullet = new Vector ([0.0, 0.0, 0.0], n, 1.0);
+		
+		var itpmat = geninterpmat (bullet, target);
+		var smat = genscalemat(0.1);
+		logMatrix(smat);
+		l('*')
+		logMatrix(itpmat);
+		
+		itpmat = multiplymatrix (smat, itpmat);
+		l('=')
+		logMatrix(itpmat);
+		l('bullet', 'lg');
+		logVector(bullet);
+		l('target', 'lg');
+		logVector(target);
+		l('interpolation matrix', 'lg')
+		logMatrix (itpmat);		
+		var w = $.extend(true, {}, miniView.Items[0].w);
+		
+		var ww = $.extend(true, {}, w);
+		for ( var i = 0 ; i < w.nv ; i++ )
+		w.vertices[i] = applymatNscale(itpmat, ww.vertices[i]);
+		
+		var tmp1 = [
+		
+		parseFloat(w.vertices[w.triangles[id][0]-1][0]), 
+		parseFloat(w.vertices[w.triangles[id][0]-1][1]), 
+		parseFloat(w.vertices[w.triangles[id][0]-1][2]) 
+		
+		];
+		
+		var tmp2 = [
+		
+		parseFloat(w.vertices[w.triangles[id][1]-1][0]), 
+		parseFloat(w.vertices[w.triangles[id][1]-1][1]), 
+		parseFloat(w.vertices[w.triangles[id][1]-1][2]) 
+		
+		];
+		
+		var tmp3 = [
+		
+		parseFloat(w.vertices[w.triangles[id][2]-1][0]), 
+		parseFloat(w.vertices[w.triangles[id][2]-1][1]), 
+		parseFloat(w.vertices[w.triangles[id][2]-1][2]) 
+		
+		];
+		
+		
+		l('tmpt');
+		l(tmp1);
+		l(tmp2);
+		l(tmp3);
+
+
+	
+
+		var svgtrigon = ''+tmp1[0]+', '+tmp1[1]+' '+tmp2[0]+', '+tmp2[1]+' '+tmp3[0]+', '+tmp3[1];
+		
+		l(svgtrigon);
+
+		
+		
+		
+		add_to_renderplane (renderplane, svgtrigon);
+		
 	});	
 
 

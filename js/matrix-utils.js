@@ -9,6 +9,8 @@ function Vector(a, b, c) {
 }
 window.Vector = Vector;
 function vectfromvertices(a, b) {
+	if (a[0] == b[0] && a[1] == b[1] && a[2] == b[2])
+		return new Vector([0.0, 0.0, 0.0], [0.0, 0.0, 0.0], 1.0);
     var c = Math.sqrt((b[0] - a[0]) * (b[0] - a[0]) + (b[1] - a[1]) * (b[1] - a[1]) + (b[2] - a[2]) * (b[2] - a[2]));
     return new Vector(a, [(b[0] - a[0]) / c, (b[1] - a[1]) / c, (b[2] - a[2]) / c], c)
 }
@@ -76,6 +78,16 @@ function applymatNpersp(a, b) {
 }
 window.applymatNpersp = applymatNpersp;
 
+function applymatNscale(a, b) {
+    var c = [];
+    c.lenth = 3;
+    c[2] = a[8] * b[0] + a[9] * b[1] + a[10] * b[2] + a[11];
+    c[0] = scaleconst / c[2] * (a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3]);
+    c[1] = scaleconst / c[2] * (a[4] * b[0] + a[5] * b[1] + a[6] * b[2] + a[7]);
+    return c
+}
+window.applymatNscale = applymatNscale;
+
 function genimat() {
     var a = [];
     a.length = 16;
@@ -94,18 +106,33 @@ function gentmat(a, b, c) {
     return d
 }
 window.gentmat = gentmat;
-function gentmatfromvector(v) {
-	var a = v.s[0]*v.n;
-	var b = v.s[1]*v.n;
-	var c = v.s[2]*v.n;
+function gentmatfromvector(vect) {
+
+	var a = vect.s[0]*vect.n;
+	var b = vect.s[1]*vect.n;
+	var c = vect.s[2]*vect.n;
 
 	var d = genimat();
+
 	d[3] = a;
 	d[7] = b;
 	d[11] = c;
 	return d;
 }
 window.gentmatfromvector = gentmatfromvector;
+
+function genscalemat(scale) {
+
+	var d = genimat();
+
+	d[0] = scale;
+	d[5] = scale;
+	d[10] = scale;
+	d[15] = scale;
+
+	return d;
+}
+window.genscalemat = genscalemat;
 
 function genrmat(a, b, c) {
     a *= Math.PI / 180;
@@ -154,14 +181,21 @@ function axe_ang_to_mat ( axe, ang )
 }
 window.axe_ang_to_mat = axe_ang_to_mat;
 function geninterpmat (vs, ve)
-{
+{	
+	l(' ## interpolation', 'lg');
 	var scal, ang;
 	var frmat = genimat ();
 	// matrice de translation :
 	var translatevector = vectfromvertices( vs.o, ve.o );
+//	l('vertice a');
+//	logVertice (vs.o);
+//	l('vertice b');
+//	logVertice (ve.o);
+//	l('translate vector :', 'lg');
 //	logVector (translatevector);	
 	var ftmat = gentmatfromvector (translatevector);
-//	logMatrix(tmat);
+//	l('ftmat', 'lb')
+//	logMatrix(ftmat);
 
 	// verrification du cas d'alignement des vecteurs :
 	var aligntestvector = vectfromvertices( vs.s, ve.s );

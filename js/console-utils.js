@@ -46,7 +46,7 @@ function logMatrix(m) {
 function logVector(a) {
     l("origine: " + a.o + "\nsens: " + a.s + "\nnorme: " + a.n, 'l')
 }
-window.logVertice = logVector;
+window.logVector = logVector;
 function logVertice(a) {
     console.log("x: " + a[0] + " y: " + a[1] + " z: " + a[2])
 }
