@@ -14,10 +14,51 @@ function l (s)
 
 
 function admintools ()
-{
-	var converter = new showdown.Converter();
+{/*=
+const showdown = require('showdown');
+
+const classMap = {
+  h1: 'ui large header',
+  h2: 'ui medium header',
+  ul: 'ui list',
+  li: 'ui item'
+}
+
+const bindings = Object.keys(classMap)
+  .map(key => ({
+    type: 'output',
+    regex: new RegExp(`<${key}>`, 'g'),
+    replace: `<${key} class="${classMap[key]}">`
+  }));
+
+const conv = new showdown.Converter({
+  extensions: [...bindings],
+  noHeaderId: true // important to add this, else regex match doesn't work
+});*/
+
+
+const classMap = {
+  img: '.img-fluid.full',
+  h2: '.ui.medium.headeeeer',
+  ul: '.ui.list',
+  li: '.ui.item'
+}
+const bindings = Object.keys(classMap)
+  .map(key => ({
+    type: 'output',
+    regex: new RegExp(`<${key}>`, 'g'),
+    replace: `<${key} class="${classMap[key]}">`
+  }));
+
+
+const converter = new showdown.Converter({
+  extensions: [...bindings],
+  noHeaderId: true // important to add this, else regex match doesn't work
+});
+
+
 	l ( "s1p-admintools 0.1");
-	showdown.setOption('optionKey', 'value');
+
 	
 	$('#convert').on('click', function() {
 	

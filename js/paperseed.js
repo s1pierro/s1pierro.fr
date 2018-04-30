@@ -8,22 +8,10 @@
 'use strict';
 
 ////////////////////////////////////////////////////////////////////////////////
-//	Maths funcions
-////////////////////////////////////////////////////////////////////////////////
-function Vector(a,b,c){this.o=a;this.s=b;this.n=c}function vectfromvertices(a,b){var c=Math.sqrt((b[0]-a[0])*(b[0]-a[0])+(b[1]-a[1])*(b[1]-a[1])+(b[2]-a[2])*(b[2]-a[2]));return new Vector(a,[(b[0]-a[0])/c,(b[1]-a[1])/c,(b[2]-a[2])/c],c)}window.vectfromvertices=vectfromvertices;window.Vector=Vector;function logVector(a){console.log("origine: "+a.o+" sens: "+a.s+" norme: "+a.n)}window.logVector=logVector;function magnitudevertex(a){return Math.sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2])}
-window.magnitudevertex=magnitudevertex;function normalisevertex(a){var b=[0,0,0],c=magnitudevertex(a);b[0]=a[0]/c;b[1]=a[1]/c;b[2]=a[2]/c;return b}window.normalisevertex=normalisevertex;function vectorproduct(a,b){return[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]]}window.vectorproduct=vectorproduct;function scalarproduct(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]}window.scalarproduct=scalarproduct;
-function multiplymatrix(a,b){var c=[];c.length=16;var d,e,f;for(e=0;4>e;e++)for(d=0;4>d;d++)for(f=c[d+4*e]=0;4>f;f++)c[d+4*e]+=a[f+4*e]*b[d+4*f];return c}window.multiplymatrix=multiplymatrix;function applypersp(a){v1[0]=viewangle/a[2]*a[0];v1[1]=viewangle/a[2]*a[1];v1[2]=a[2];return v1}window.applypersp=applypersp;function applymat(a,b){var c=$.extend(!0,[],b);c[0]=a[0]*b[0]+a[1]*b[1]+a[2]*b[2]+a[3];c[1]=a[4]*b[0]+a[5]*b[1]+a[6]*b[2]+a[7];c[2]=a[8]*b[0]+a[9]*b[1]+a[10]*b[2]+a[11];return c}
-window.applymat=applymat;function applymatNpersp(a,b){var c=[];c.lenth=3;c[2]=a[8]*b[0]+a[9]*b[1]+a[10]*b[2]+a[11];c[0]=viewangle/c[2]*(a[0]*b[0]+a[1]*b[1]+a[2]*b[2]+a[3]);c[1]=viewangle/c[2]*(a[4]*b[0]+a[5]*b[1]+a[6]*b[2]+a[7]);return c}window.applymatNpersp=applymatNpersp;function genimat(){var a=[];a.length=16;var b,c;for(b=0;4>b;b++)for(c=0;4>c;c++)a[b+4*c]=b==c?1:0;return a}window.genimat=genimat;function gentmat(a,b,c){var d=genimat();d[3]=a;d[7]=b;d[11]=c;return d}window.gentmat=gentmat;
-function genrmat(a,b,c){a*=Math.PI/180;var d=Math.PI/180*b,e=Math.PI/180*c;c=genimat();b=Math.cos(a);a=Math.sin(a);var f=Math.cos(d);d=Math.sin(d);var g=Math.cos(e);e=Math.sin(e);var h=b*d,k=a*d;c[0]=f*g;c[1]=-f*e;c[2]=-d;c[4]=-k*g+b*e;c[5]=k*e+b*g;c[6]=-a*f;c[8]=h*g+a*e;c[9]=-h*e+a*g;c[10]=b*f;c[3]=c[7]=c[11]=c[12]=c[13]=c[14]=0;c[15]=1;return c}window.genrmat=genrmat;
-
-////////////////////////////////////////////////////////////////////////////////
 //	miniView core functions
 ////////////////////////////////////////////////////////////////////////////////
-function Log(s)
-{
-	console.log (s);
-}
-window['Log'] = Log;
+
+
 
 
 var buffer = {};
@@ -310,9 +298,6 @@ function rotateWavefront (wavefront, x, y, z)
 window['rotateWavefront'] = rotateWavefront;
 
 
-function miniView () {
-}
-window['rotateWavefront'] = rotateWavefront;
 function initScene()
 {
 
@@ -359,12 +344,38 @@ function getFaceId(f) {
 }
 window['getFaceId'] = getFaceId;
 function miniView () {
-		
-
 	var mode = (eval("var __temp = null"), (typeof __temp === "undefined")) ? 
 	    "strict": 
 	    "non-strict";
-	    console.log('interprete js : '+mode);
+	    if (mode == "strict")
+	    	l('interprete js : '+mode, 'lg');
+		else
+	    	l('interprete js : '+mode, 'blr');
+
+
+	/*======================================================================*/
+	// TESTING AREA //
+
+	var v1 = new Vector ([0.0, 0.0, 0.0], [0.0, 1.0, 0.0], 2.0);
+	var v2 = new Vector ([0.0, 10.0, 0.0], [1.0, 0.0, 0.0], 2.0);
+	
+	l('vecteur 1', 'xlb');
+	logVector (v1);
+	l('vecteur 2', 'xlb');	
+	logVector (v2);
+	
+	var itpmat = geninterpmat (v1, v2);
+	l('matrice d interpolation :', 'xlb')
+	logMatrix (itpmat);
+
+	
+	
+
+	// TESTING AREA //
+	/*======================================================================*/
+
+
+
 
 	/*======================================================================
 	

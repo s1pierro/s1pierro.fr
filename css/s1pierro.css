@@ -9,7 +9,19 @@ pre
 	color: #000 !important;
 	padding: 0.5em;
 }
-
+code
+{
+	background-color: #d1ff9f;
+	color: #000 !important;
+	padding: 0.5em;
+}
+p
+{
+	margin-top:1em;
+}
+.full {
+    width:100%;
+}
 .bg-soft
 {
 	color: #111;
