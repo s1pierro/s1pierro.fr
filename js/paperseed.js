@@ -443,6 +443,7 @@ function miniView () {
 		
 		var ut = '.ID'+id+'ID';
 		l(ut);
+		$('.active').removeClass('active');
 		$(ut).addClass ('active');
 		
 		

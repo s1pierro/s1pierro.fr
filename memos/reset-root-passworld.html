@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+  <head>
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
+	<link rel="icon" type="image/png" sizes="32x32" href="s1p-blue.png">
+
+	<link href="../css/s1p-icon-font.css" rel="stylesheet">
+
+
+
+    <meta name="description" content="">
+    <meta name="author" content="s1pierro@free.fr">
+
+    <title>Guide de recuperation du compte root</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/s1pierro.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+
+  </head>
+
+<body>
+	<section id="content">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-lg-8 mx-auto">
+
+	<h1>Redéfinir le mot de passe du super utilisateur (root)</h1>
+  <small>Cet article est une traduction de <a href="https://fedoramagazine.org/reset-root-password-fedora/">https://fedoramagazine.org/reset-root-password-fedora/</a> initialement redigé par <strong>Curt Warfield</strong></small>
+  
+  	<p>Un administrateur système peut aisément redéfinir les mots de passe des
+	utilisateurs qui les auraiennt oublié ou perdu. Mais que se produit il si
+	l'administrateur système oubli ou perd le mot de passe du super utilisateur
+	root? Ce guide vous explique comment redéfinir ce mot de passe. Notez que pour
+	cela vous devez avoir un accès physique au système, afin de redémarrer et
+	accéder aux paramètres de Grub. De plus, si le système est encrypter, vous
+	devez connaître la phrase secrète LUKS.</p>
+	<h2>Modification des paramètres de Grub</h2>
+	<p>Premièrement, vous devez interrompre le processus de boot. Il vous faut
+	donc redemander ou allumer le système: </p>
+	<p><img alt="grub" src="medias/grub.png" class="img-flud full"></p>
+	<p>pressez "e" a l’apparition du menu Grub, l’écran suivant devrait apparaître</p>
+	<p><img alt="grub" src="medias/grub2.png" class="img-flud full"></p>
+	<p>utilisez les flèches pour vous déplacer jusqu’à la ligne
+	<strong>linux16</strong></p>
+	<p><img alt="grub" src="medias/grub3.png" class="img-flud full"></p>
+	<p>remplacez <code>rhgb quiet</code> par <code>rd.break enforcing=0</code></p>
+	<p><img alt="grub" src="medias/grub4.png" class="img-flud full"></p>
+	
+	<p>Une fois la modification de ces options terminé, appuyez sur
+	<strong>CTRL+x</strong> pour lancer le systeme. La phrase secrète LUKS vous
+	sera demandé a cette étape si le système est encrypté.</p>
+	<p>Note: Le parametre <strong>enforcing=0</strong>, avoids performing a
+	complete system SELinux relabeling. Once the system is rebooted, restore the
+	correct SELinux context for the /etc/shadow file. (this is explained a little
+	further in this process)</p>
+	<h2>Montage du système de fichier</h2>
+	<p>Le système devrait maintenant etre en mode <em>emergency</em>. Remontez le
+	disque dur en lecture et écriture:</p>
+	<pre><code># mount –o remount,rw /sysroot
+</code></pre>
+	<h2>Changement du mot de passe</h2>
+	<p>Accedez au système a l'aide de chroot.</p>
+	<pre><code># chroot /sysroot
+</code></pre>
+	<p>Vous pouvez maintenant modifier le mot de passe</p>
+	<pre><code># passwd
+</code></pre>
+	<p>Entrez et confirmez le nouveau mot de passe. Il vous sera indiqué en cas de succés que les jetons d'authentification ont correctement été mis a jour'</p>
+		<h2>Remmetre le système en ordre</h2>
+	<p>Saisissez <code>exit</code>, deux fois pour redemarrer le système</p>
+	<p>Connectez vous en tant que super uilisateur pour restaurer les etiquettes SELinux du fichier <strong>/etc/shadow</strong>.</p>
+	<pre><code># restorecon -v /etc/shadow
+</code></pre>
+	<p>réacxtivez le mode fortifié de SELinux.</p>
+	<pre><code># setenforce 1
+</code></pre>
+				</div>	
+			</div>
+		</div>
+		</section>
+		<section id="credits">
+			<div class="container">
+			<div class="row">
+
+				<div class="col-lg-8 mx-auto">
+	
+		source : <a href="https://fedoramagazine.org/reset-root-password-fedora/">https://fedoramagazine.org/reset-root-password-fedora/</a><br>
+		traduction : Thomas Saint Pierre (s1pierro@free.fr) <br>
+		
+		
+		</div>
+		
+			</div>
+		</div>
+		
+		</section>
+
+</body>
+</html>
