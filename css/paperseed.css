@@ -72,6 +72,13 @@ background: radial-gradient(ellipse at center,  #777 0%,#111 100%); /* W3C, IE10
 	stroke: #000;
 	stroke-width: .07px;
 }
+.solid.active {
+
+	fill: #cfcfcf;
+	opacity: 1.0;
+	stroke: #000;
+	stroke-width: .07px;
+}
 .solid-step-1 {	 fill: #d3d3d3; }
 .solid-step-2 {	 fill: #d6d6d6; }
 .solid-step-3 {	 fill: #d9d9d9; }
@@ -87,5 +94,21 @@ background: radial-gradient(ellipse at center,  #777 0%,#111 100%); /* W3C, IE10
 .solid-step-13 { fill: #f9f9f9; }
 .solid-step-14 { fill: #fcfcfc; }
 .solid-step-15 { fill: #ffffff; }
+
+.active.solid-step-1 {	 fill: #03b3b3; }
+.active.solid-step-2 {	 fill: #06b6b6; }
+.active.solid-step-3 {	 fill: #09b9b9; }
+.active.solid-step-4 {	 fill: #0cbcbc; }
+.active.solid-step-5 {	 fill: #0fbfbf; }
+.active.solid-step-6 {	 fill: #03c3c3; }
+.active.solid-step-7 {  fill: #06c6c6; }
+.active.solid-step-8 {  fill: #09c9c9; }
+.active.solid-step-9 {	 fill: #0ccccc; }
+.active.solid-step-10 { fill: #0fcfcf; }
+.active.solid-step-11 { fill: #03d3d3; }
+.active.solid-step-12 { fill: #06d6d6; }
+.active.solid-step-13 { fill: #09d9d9; }
+.active.solid-step-14 { fill: #0cdcdc; }
+.active.solid-step-15 { fill: #0fdfdf; }
 
 

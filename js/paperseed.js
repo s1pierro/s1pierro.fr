@@ -383,6 +383,7 @@ function miniView () {
 		initScene();	
 		drawScene(container);
 	}
+	var activeshape = 0; 
 
 	// configuration hammerJS
 
@@ -410,8 +411,15 @@ function miniView () {
 			window.scrollBy(0,-ev.velocityY*20);
 		}
 	});
-	$('.test').on('mousedown', function() {
-		console.log('test down');
+	$('html, .shape').on('mouseup', function() {
+
+				var ut = '.ID'+activeshape+'ID';
+
+		$(ut).addClass ('active');
+		
+		l(ut, 'xlb');
+
+
 	});
 
 	$('body').on('click', '#menu-toggle', function() {
@@ -429,8 +437,13 @@ function miniView () {
 		// Dirty implementation trying, will be replace by separate explicit functions
 		
 		
-		var id = getFaceId (this)
+		var id = getFaceId (this);
+		activeshape = id;
 		l("shape "+id+" tapped", 'xlb');
+		
+		var ut = '.ID'+id+'ID';
+		l(ut);
+		$(ut).addClass ('active');
 		
 		
 		
