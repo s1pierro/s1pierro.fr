@@ -8,7 +8,7 @@
 //'use strict';
 
 ////////////////////////////////////////////////////////////////////////////////
-//	miniView core functions
+//	paperseed core functions
 ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -84,10 +84,10 @@ function drawSceneFlat(container) {  //optimised speed ( cut in lightening acura
 	//drawenv(container);
 	var mat = multiplymatrix(rmat, pmat);
 	fmat = multiplymatrix(tmat, mat);
-	genItemszmap(miniView.Items);
-	for ( var v = 0 ; v < miniView.Items.zmap.length ; v++ )
+	genItemszmap(paperseed.Items);
+	for ( var v = 0 ; v < paperseed.Items.zmap.length ; v++ )
 	{
-		var tmpWvft = miniView.Items[miniView.Items.zmap[v][0]].w;
+		var tmpWvft = paperseed.Items[paperseed.Items.zmap[v][0]].w;
 		buffer = $.extend(true, {}, tmpWvft);
 		for (var i = 0; i < tmpWvft.vertices.length; i++)
 			buffer.vertices[i] = applymatNpersp(fmat, tmpWvft.vertices[i]);
@@ -115,10 +115,10 @@ function drawSceneSolid(container) {  //optimised speed ( cut in lightening acur
 	//drawenv(container);
 	var mat = multiplymatrix(rmat, pmat);
 	fmat = multiplymatrix(tmat, mat);
-	genItemszmap(miniView.Items);
-	for ( var v = 0 ; v < miniView.Items.zmap.length ; v++ )
+	genItemszmap(paperseed.Items);
+	for ( var v = 0 ; v < paperseed.Items.zmap.length ; v++ )
 	{
-		var tmpWvft = miniView.Items[miniView.Items.zmap[v][0]].w;
+		var tmpWvft = paperseed.Items[paperseed.Items.zmap[v][0]].w;
 		buffer = $.extend(true, {}, tmpWvft);
 		for (var i = 0; i < tmpWvft.vertices.length; i++)
 			buffer.vertices[i] = applymatNpersp(fmat, tmpWvft.vertices[i]);
@@ -246,10 +246,10 @@ function genItemszmap(pcs) {
 	}
 	var tmp = new Array();
 
-	for (var i = 0; i < miniView.Items.length; i++)
-		buffer.vertices[i] = applymat(fmat, miniView.Items[i].w.vertices[0]);
+	for (var i = 0; i < paperseed.Items.length; i++)
+		buffer.vertices[i] = applymat(fmat, paperseed.Items[i].w.vertices[0]);
 
-	for (var i = 0; i < miniView.Items.length; i++) {
+	for (var i = 0; i < paperseed.Items.length; i++) {
 		var tmp2 = new Array(i, buffer.vertices[i][2]);
 		tmp.push(tmp2);
 	}
@@ -325,7 +325,7 @@ function buildScene()
 	var Logo = {};
 	var TMPwvft = {};
 	Logo = $.extend(true, {}, loadWavefrontFromHTLM('#logo', 'logo'));
-	miniView.Items.splice (0, miniView.Items.length );
+	paperseed.Items.splice (0, paperseed.Items.length );
 	var tmpWvft2 = {};
 	
 	var vpos = [0, 0, 0];
@@ -333,10 +333,10 @@ function buildScene()
 	var v = 0;
 	var square = 'a0';
 	tmpWvft2 = $.extend(true, {}, Logo);
-	var altItem = {id: miniView.Items.length, pos: vpos,  x: u, y: v, index: 0, w: {}};
-	setWavefrontId(tmpWvft2, miniView.Items.length);			
+	var altItem = {id: paperseed.Items.length, pos: vpos,  x: u, y: v, index: 0, w: {}};
+	setWavefrontId(tmpWvft2, paperseed.Items.length);			
 	altItem.w = $.extend(true, {},tmpWvft2 );
-	miniView.Items.push(altItem);
+	paperseed.Items.push(altItem);
 }
 window['buildScene'] = buildScene;
 function getFaceId(f) {
@@ -356,7 +356,7 @@ function add_to_renderplane (renderplane, t)
 			renderplane.appendChild(svg);
 
 }
-function miniView () {
+function paperseed () {
 	var mode = (eval("var __temp = null"), (typeof __temp === "undefined")) ? 
 	    "strict": 
 	    "non-strict";
@@ -374,9 +374,9 @@ function miniView () {
 
 	var container = document.getElementById("renderbox");
 	var renderplane = document.getElementById("renderplane");
-	if ( typeof miniView.init == 'undefined' ) {
-		miniView.init = true;
-		miniView.Items = [];
+	if ( typeof paperseed.init == 'undefined' ) {
+		paperseed.init = true;
+		paperseed.Items = [];
 		buildScene ();
 		buffer = $.extend(true, {}, loadWavefrontFromHTLM('#logo', 'buffer'));
 		
@@ -403,7 +403,7 @@ function miniView () {
 	
 	// interactions vue
 	mc.on("pan", function(ev) {
-		if (miniView.view != 'mobile') {
+		if (paperseed.view != 'mobile') {
 			rotateView(ev.velocityY * 15, ev.velocityX * 15, 0);
 			drawScene(container);
 		}
@@ -411,7 +411,8 @@ function miniView () {
 			window.scrollBy(0,-ev.velocityY*20);
 		}
 	});
-	$('html, .shape').on('mouseup', function() {
+//	$('html, .shape').on('mouseup', function() {
+	mc.on("panend", function(ev) {
 
 				var ut = '.ID'+activeshape+'ID';
 
@@ -448,7 +449,7 @@ function miniView () {
 		
 		
 		
-		var n = miniView.Items[0].w.triangles[id].n;
+		var n = paperseed.Items[0].w.triangles[id].n;
 
 		
 		var target = new Vector ([0.0, 0.0, 0.0], [0.0, 0.0, 1.0], 1.0);
@@ -469,7 +470,7 @@ function miniView () {
 		logVector(target);
 		l('interpolation matrix', 'lg')
 		logMatrix (itpmat);		
-		var w = $.extend(true, {}, miniView.Items[0].w);
+		var w = $.extend(true, {}, paperseed.Items[0].w);
 		
 		var ww = $.extend(true, {}, w);
 		for ( var i = 0 ; i < w.nv ; i++ )
@@ -523,10 +524,10 @@ function miniView () {
 
 }
 		
-window['miniView'] = miniView;
+window['paperseed'] = paperseed;
 
 
-$(window).on("load", miniView ());
+$(window).on("load", paperseed ());
 
 
 
