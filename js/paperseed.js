@@ -65,7 +65,7 @@ function translateView(x, y, z)
 {
 	var tmp = gentmat( x, y, z);
 	tmat = multiplymatrix (tmp, tmat);
-	logMatrix(tmat);
+
 }
 window['translateView'] = translateView;
 function genfmat() {
@@ -162,9 +162,8 @@ function parsewavefront(objText, id) {
 		obj.vertices = vertexMatches.map(function(vertex) {
 			nv++;
 			var vertices = vertex.split(" ");
-			vertices.shift();
-			
-			return vertices;
+			vertices.shift(); 
+			return Float32Array.from(vertices);;
 		});
 	}
 	if (positionMatches) {
@@ -177,6 +176,9 @@ function parsewavefront(objText, id) {
 			nt++;
 			var triangles = tri.split(" ");
 			triangles.shift();
+			l(triangles);
+			var t = Uint16Array.from(triangles);
+			l(t);
 			return triangles;
 		});
 	}
@@ -375,7 +377,9 @@ function paperseed () {
 	var container = document.getElementById("renderbox");
 	var renderplane = document.getElementById("renderplane");
 	if ( typeof paperseed.init == 'undefined' ) {
+		
 		paperseed.init = true;
+		
 		paperseed.Items = [];
 		buildScene ();
 		buffer = $.extend(true, {}, loadWavefrontFromHTLM('#logo', 'buffer'));
@@ -437,85 +441,41 @@ function paperseed () {
 	
 		// Dirty implementation trying, will be replace by separate explicit functions
 		
-		
 		var id = getFaceId (this);
 		activeshape = id;
-		l("shape "+id+" tapped", 'xlb');
-		
-		var ut = '.ID'+id+'ID';
-		l(ut);
 		$('.active').removeClass('active');
-		$(ut).addClass ('active');
+		$(this).addClass ('active');
+
 		
+	
 		
 		
 		var n = paperseed.Items[0].w.triangles[id].n;
 
-		
 		var target = new Vector ([0.0, 0.0, 0.0], [0.0, 0.0, 1.0], 1.0);
 		var bullet = new Vector ([0.0, 0.0, 0.0], n, 1.0);
 		
 		var itpmat = geninterpmat (bullet, target);
-		var smat = genscalemat(0.1);
-		logMatrix(smat);
-		l('*')
-		logMatrix(itpmat);
-		
-		itpmat = multiplymatrix (smat, itpmat);
-		l('=')
-		logMatrix(itpmat);
-		l('bullet', 'lg');
-		logVector(bullet);
-		l('target', 'lg');
-		logVector(target);
-		l('interpolation matrix', 'lg')
-		logMatrix (itpmat);		
+
 		var w = $.extend(true, {}, paperseed.Items[0].w);
 		
-		var ww = $.extend(true, {}, w);
 		for ( var i = 0 ; i < w.nv ; i++ )
-		w.vertices[i] = applymatNscale(itpmat, ww.vertices[i]);
+			w.vertices[i] = applymatNscale(itpmat, w.vertices[i]);
 		
-		var tmp1 = [
+//			w.vertices[i] = applymatNscale(itpmat, w.vertices[parseInt(w.triangles[id][i])-1)]);
 		
-		parseFloat(w.vertices[w.triangles[id][0]-1][0]), 
-		parseFloat(w.vertices[w.triangles[id][0]-1][1]), 
-		parseFloat(w.vertices[w.triangles[id][0]-1][2]) 
-		
-		];
-		
-		var tmp2 = [
-		
-		parseFloat(w.vertices[w.triangles[id][1]-1][0]), 
-		parseFloat(w.vertices[w.triangles[id][1]-1][1]), 
-		parseFloat(w.vertices[w.triangles[id][1]-1][2]) 
-		
-		];
-		
-		var tmp3 = [
-		
-		parseFloat(w.vertices[w.triangles[id][2]-1][0]), 
-		parseFloat(w.vertices[w.triangles[id][2]-1][1]), 
-		parseFloat(w.vertices[w.triangles[id][2]-1][2]) 
-		
-		];
-		
-		
-		l('tmpt');
-		l(tmp1);
-		l(tmp2);
-		l(tmp3);
+		var tmptri = [ [ (w.vertices[w.triangles[id][0]-1][0]), 
+				 (w.vertices[w.triangles[id][0]-1][1])  ],
+				     
+			       [ (w.vertices[w.triangles[id][1]-1][0]), 
+				 (w.vertices[w.triangles[id][1]-1][1])  ],
+				
+			       [ (w.vertices[w.triangles[id][2]-1][0]), 
+				 (w.vertices[w.triangles[id][2]-1][1])  ] ];
 
-
-	
-
-		var svgtrigon = ''+tmp1[0]+', '+tmp1[1]+' '+tmp2[0]+', '+tmp2[1]+' '+tmp3[0]+', '+tmp3[1];
-		
-		l(svgtrigon);
-
-		
-		
-		
+		var svgtrigon = tmptri[0][0]+', '+tmptri[0][1]+
+			    ' '+tmptri[1][0]+', '+tmptri[1][1]+
+			    ' '+tmptri[2][0]+', '+tmptri[2][1];
 		add_to_renderplane (renderplane, svgtrigon);
 		
 	});	

@@ -282,7 +282,9 @@ function parsewavefront(objText, id) {
 			nv++;
 			var vertices = vertex.split(" ");
 			vertices.shift();
-			return vertices;
+			var v = Float32Array.from(vertices);
+			return v;
+
 		});
 	}
 	if (positionMatches) {
