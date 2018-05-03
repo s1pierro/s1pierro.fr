@@ -1,11 +1,11 @@
 /*
-	miniVewer 0.1
+	paperseed 0.0.1
 	
 	Saint Pierre Thomas
 	spierro@free.fr
 	LICENSE : libre
 */
-//'use strict';
+'use strict';
 
 ////////////////////////////////////////////////////////////////////////////////
 //	paperseed core functions
