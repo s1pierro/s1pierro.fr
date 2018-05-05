@@ -1,9 +1,11 @@
-/*!
- * Start Bootstrap - Scrolling Nav (https://startbootstrap.com/template-overviews/scrolling-nav)
- * Copyright 2013-2017 Start Bootstrap
- * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-scrolling-nav/blob/master/LICENSE)
- */
-
+/*
+	this file is a part of 
+	paperseed 0.0.1
+		
+	Author : Saint Pierre Thomas
+	feel fre to contact me at spierro@free.fr
+	Licenced under the termes of the GNU GPL v3
+*/
 
 body
 {
@@ -70,14 +72,15 @@ background: radial-gradient(ellipse at center,  #777 0%,#111 100%); /* W3C, IE10
 	fill: #cfcfcf;
 	opacity: 1.0;
 	stroke: #000;
-	stroke-width: .07px;
+	stroke-width: .17px;
 }
 .solid.active {
 
 	fill: #cfcfcf;
 	opacity: 1.0;
 	stroke: #000;
-	stroke-width: .07px;
+	stroke-width: .27px;
+	stroke-linejoin: bevel;
 }
 .solid-step-1 {	 fill: #d3d3d3; }
 .solid-step-2 {	 fill: #d6d6d6; }

@@ -1,18 +1,16 @@
 /*
+	this file is a part of 
 	paperseed 0.0.1
-	
-	Saint Pierre Thomas
-	spierro@free.fr
-	LICENSE : libre
+		
+	Author : Saint Pierre Thomas
+	feel fre to contact me at spierro@free.fr
+	Licenced under the termes oftrhe GNU GPL v3
 */
 'use strict';
 
 ////////////////////////////////////////////////////////////////////////////////
 //	paperseed core functions
 ////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 var buffer = {};
 
@@ -28,7 +26,6 @@ var tmat = genimat();
 var pmat = genimat();
 var yAMAX = 160;
 var yAMIN = 70;
-
 
 function initView(x, y, z, zm)
 {
@@ -176,9 +173,9 @@ function parsewavefront(objText, id) {
 			nt++;
 			var triangles = tri.split(" ");
 			triangles.shift();
-			l(triangles);
+//			l(triangles);
 			var t = Uint16Array.from(triangles);
-			l(t);
+//			l(t);
 			return triangles;
 		});
 	}
@@ -383,6 +380,9 @@ function paperseed () {
 		paperseed.Items = [];
 		buildScene ();
 		buffer = $.extend(true, {}, loadWavefrontFromHTLM('#logo', 'buffer'));
+		paperseed.impression = {};
+		
+		l(paperseed.impression);
 		
 		initScene();	
 		drawScene(container);
@@ -447,8 +447,6 @@ function paperseed () {
 		$(this).addClass ('active');
 
 		
-	
-		
 		
 		var n = paperseed.Items[0].w.triangles[id].n;
 
@@ -462,26 +460,34 @@ function paperseed () {
 		for ( var i = 0 ; i < w.nv ; i++ )
 			w.vertices[i] = applymatNscale(itpmat, w.vertices[i]);
 		
-//			w.vertices[i] = applymatNscale(itpmat, w.vertices[parseInt(w.triangles[id][i])-1)]);
-		
 		var tmptri = [ [ (w.vertices[w.triangles[id][0]-1][0]), 
-				 (w.vertices[w.triangles[id][0]-1][1])  ],
+				 (w.vertices[w.triangles[id][0]-1][1]), 
+				 (w.vertices[w.triangles[id][0]-1][2])  ],
 				     
 			       [ (w.vertices[w.triangles[id][1]-1][0]), 
-				 (w.vertices[w.triangles[id][1]-1][1])  ],
+				 (w.vertices[w.triangles[id][1]-1][1]), 
+				 (w.vertices[w.triangles[id][1]-1][2])  ],
 				
 			       [ (w.vertices[w.triangles[id][2]-1][0]), 
-				 (w.vertices[w.triangles[id][2]-1][1])  ] ];
+				 (w.vertices[w.triangles[id][2]-1][1]), 
+				 (w.vertices[w.triangles[id][2]-1][2])  ] ];
+
+		
 
 		var svgtrigon = tmptri[0][0]+', '+tmptri[0][1]+
 			    ' '+tmptri[1][0]+', '+tmptri[1][1]+
 			    ' '+tmptri[2][0]+', '+tmptri[2][1];
 		add_to_renderplane (renderplane, svgtrigon);
+		var flatmat = gentmat (234.0, 143.0, 0.0);
+		
+		var trsltri = $.extend(true, [], tmptri);
+
+		for ( var i = 0 ; i < 3 ; i++ )
+			trsltri[i] = applymatNscale(flatmat, tmptri[i]);
+		console.log(trsltri);
+				l(tmptri);
 		
 	});	
-
-
-
 }
 		
 window['paperseed'] = paperseed;
